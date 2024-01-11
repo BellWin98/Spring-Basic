@@ -1,0 +1,37 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.11'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.encore'
+
+// 빌드된 jar파일의 버전명
+// jar: 프로그램을 실행할 수 있도록 만들어놓은 java 압축 파일
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '11'
+}
+
+repositories {
+	// 의존성(라이브러리)을 가져오는 대상 Repository (저장소), apt-get과 동일
+	// 내부망에 구축되어 있는 프로젝트의 경우 Nexus(넥서스)와 같은 라이브러리를 사용하여 회사 고유의 내부망 Repository사용
+	//	maven { url "http://nexus.XXXXX.com:8081/nexus/content/groups/public/"
+	mavenCentral()
+}
+
+// starter 종속성: 별도의 버전 관리 필요 X (자동으로 호환성 맞춰줌)
+dependencies {
+	// thymeleaf 관련 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	// Spring mvc(model, view, controller) 구조의 웹 서비스 관련 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// 테스트를 위한 의존성: 소스 코드를 통해 코드를 검증
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+// 테스트 라이브러리로 주로 JUnit을 사용
+tasks.named('test') {
+	useJUnitPlatform()
+}
