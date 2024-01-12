@@ -13,6 +13,7 @@ public class HelloController {
     // @ResponseBody가 없고, return타입이 String이면 templates 아래에 있는 html 파일 (화면) return
     // 데이터만 return할 때는 @ResponseBody를 붙인다. (RestAPI 방식)
     // return 값이 String이면 문자열, 객체면 JSON 형식으로 자동 변환되어 값을 반환한다.
+    //    @RequestMapping(value = "string", method = RequestMethod.GET) // @GetMapping과 동일
     @GetMapping("/string") // 사용자의 요청을 분기 처리
     @ResponseBody
     public String helloString(){
