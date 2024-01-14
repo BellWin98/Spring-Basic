@@ -127,8 +127,8 @@ public class HelloController {
 
     @PostMapping("/json-post-handle3")
     @ResponseBody
-    public String jsonPostHandle3(@RequestBody Hello hello) {
+    public Hello jsonPostHandle3(@RequestBody Hello hello) {
         System.out.println(hello);
-        return "ok";
+        return hello;
     }
 }
