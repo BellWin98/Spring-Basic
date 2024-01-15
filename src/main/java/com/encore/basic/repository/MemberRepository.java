@@ -2,23 +2,12 @@ package com.encore.basic.repository;
 
 import com.encore.basic.domain.Member;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MemberRepository {
+public interface MemberRepository {
 
-    private final List<Member> members;
+    void save(Member member);
+    List<Member> findAll();
 
-    public MemberRepository(){
-        members = new ArrayList<>();
-    }
-
-    public void save(Member member){
-        members.add(member);
-    }
-
-    public List<Member> findAll(){
-        return members;
-    }
-
+    Member findById(int id);
 }

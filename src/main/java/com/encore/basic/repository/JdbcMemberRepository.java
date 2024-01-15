@@ -1,4 +1,22 @@
 package com.encore.basic.repository;
 
-public class JdbcMemberRepository {
+import com.encore.basic.domain.Member;
+
+import java.util.List;
+
+public class JdbcMemberRepository implements MemberRepository{
+    @Override
+    public void save(Member member) {
+
+    }
+
+    @Override
+    public List<Member> findAll() {
+        return null;
+    }
+
+    @Override
+    public Member findById(int id) {
+        return null;
+    }
 }

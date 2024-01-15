@@ -1,16 +1,15 @@
 package com.encore.basic.controller;
 
 import com.encore.basic.domain.Member;
+import com.encore.basic.dto.MemberResponse;
 import com.encore.basic.dto.MemberSignUpRequest;
-import com.encore.basic.repository.MemberRepository;
 import com.encore.basic.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,37 +25,56 @@ import java.util.List;
  */
 @Controller
 @Slf4j
+@RequestMapping("/members")
+//@RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
-    public MemberController() {
-        this.memberService = new MemberService();
+//    @Autowired // 의존성 주입 방법 1 -> 필드 주입 방식
+//    private MemberService memberService; // final 쓰면 초기화 해야 하므로 뺀다.
+
+    // 의존성 주입방법 2: 생성자 주입 방식 -> 가장 많이 사용
+    // final 키워드를 붙여서 재생성이 안되도록 설정
+
+    @Autowired
+    public MemberController(MemberService memberService){
+        this.memberService = memberService;
     }
 
+    // 의존성 주입 방법 3: @RequiredArgsConstructor를 이용한 방식
+//    @RequiredArgsConstructor: @NonNull 어노테이션이 붙어있는 필드
+//    또는 초기화 되지 않은 final 필드를 대상으로 생성자 생성
+
     // 회원 목록 조회
-    @GetMapping("/members")
+    @GetMapping("/")
     public String getMembers(Model model){
         log.info("가입된 회원 목록 api 시작");
-        List<Member> members = memberService.findMembers();
+        List<MemberResponse> members = memberService.findMembers();
         model.addAttribute("members", members);
         log.info("가입된 회원 목록 api 종료");
         return "member/member-list";
     }
 
     // 회원 가입
-    @GetMapping("/member/create-screen")
-    public String createScreen(){
+    @GetMapping("/create")
+    public String create(){
         log.info("회원가입 화면 리턴");
         return "member/member-create";
     }
 
-    @PostMapping("/member/create")
-    @ResponseBody
+    @PostMapping("/create")
     public String create(MemberSignUpRequest req){
         log.info("회원가입 시작");
-        Member member = memberService.signUp(req);
+        memberService.signUp(req);
         log.info("회원가입 완료");
-        return "회원가입 성공! " + member.getName() + "님 환영합니다.";
+        return "redirect:/members/";
+    }
+
+    @GetMapping("/member/find")
+    public String findMemberDetails(@RequestParam(value = "id") int id, Model model){
+        MemberResponse member = memberService.findMember(id);
+        model.addAttribute("member", member);
+        return "/member/member-details";
     }
 }

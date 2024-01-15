@@ -1,17 +1,19 @@
 package com.encore.basic.domain;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
-@Getter
-public class Member {
-    private final String name;
-    private final String email;
-    private final String password;
+import java.time.LocalDateTime;
 
-    public Member(String name, String email, String password){
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
+@Getter
+@Builder
+@AllArgsConstructor // 모든 매개변수를 넣은 생성자 (기본 생성자는 사라짐)
+public class Member {
+    private int id;
+    private String name;
+    private String email;
+    private String password;
+    private LocalDateTime createdAt;
 }
