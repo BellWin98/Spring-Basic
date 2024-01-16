@@ -30,6 +30,16 @@ dependencies {
 	// 테스트를 위한 의존성: 소스 코드를 통해 코드를 검증
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// DB 연결 위한 의존성: jdbc, mariadb 클라이언트
+//	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.mariadb.jdbc:mariadb-java-client'
+
+	// Spring Data JPA 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// mybatis 관련 의존성 추가
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+
 	// project 사이즈가 너무 커져버리므로 implementation으로 받지 않기.
 	// Getter, Setter 및 로그 관련(Slf4j) 의존성
 	compileOnly 'org.projectlombok:lombok'

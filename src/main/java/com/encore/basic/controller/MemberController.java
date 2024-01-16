@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * 1. 회원 목록 조회 기능 구현
@@ -73,8 +74,15 @@ public class MemberController {
 
     @GetMapping("/member/find")
     public String findMemberDetails(@RequestParam(value = "id") int id, Model model){
-        MemberResponse member = memberService.findMember(id);
-        model.addAttribute("member", member);
-        return "/member/member-details";
+        log.info("회원 상세조회 API Start PK id: " + id);
+        try {
+            MemberResponse member = memberService.findMember(id);
+            log.info("회원 상세 조회 Service 통과");
+            model.addAttribute("member", member);
+            log.info("회원 상세조회 API End");
+            return "/member/member-details";
+        } catch (NoSuchElementException e){
+            return "/404-error-page";
+        }
     }
 }
