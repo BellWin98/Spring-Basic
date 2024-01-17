@@ -25,9 +25,13 @@ spring:
       # update 옵션은 변경사항만 Alter 적용 (Drop 안시킴)
       # validate는 실제 DB와의 차이만을 Check
       # 실무에서는 update 또는 validate 사용
-      ddl-auto: create
+      ddl-auto: update
     # jpa가 자동으로 쿼리를 생성할 때, 쿼리가 console 창에 보여짐
     show_sql: true
+
+# mapper 파일의 위치
+mybatis:
+  mapper-locations: classpath:/mapper/**/*.xml
 
 #spring:
 #  profiles:

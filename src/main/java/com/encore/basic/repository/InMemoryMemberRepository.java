@@ -38,4 +38,9 @@ public class InMemoryMemberRepository implements MemberRepository{
         }
         return Optional.empty();
     }
+
+    @Override
+    public void delete(Member member) {
+
+    }
 }

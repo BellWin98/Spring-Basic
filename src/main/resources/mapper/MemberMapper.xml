@@ -13,7 +13,10 @@
     <select id="findById" resultType="com.encore.basic.domain.Member" parameterType="Integer">
         select * from member where id = #{id};
     </select>
-    <insert id="save">
-        insert into member(name, email, password) values(#{name}, #{email}, #{password});
-    </insert>
+    <select id="save" resultType="com.encore.basic.domain.Member">
+        insert into member(name, email, password, created_at) values(#{name}, #{email}, #{password}, #{createdAt});
+    </select>
+<!--    <insert id="save">-->
+<!--        insert into member(name, email, password, created_at) values(#{name}, #{email}, #{password}, #{createdAt});-->
+<!--    </insert>-->
 </mapper>

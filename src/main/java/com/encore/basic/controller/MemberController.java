@@ -1,18 +1,16 @@
 package com.encore.basic.controller;
 
-import com.encore.basic.domain.Member;
 import com.encore.basic.dto.MemberResponse;
-import com.encore.basic.dto.MemberSignUpRequest;
+import com.encore.basic.dto.MemberRequest;
 import com.encore.basic.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * 1. 회원 목록 조회 기능 구현
@@ -65,11 +63,42 @@ public class MemberController {
     }
 
     @PostMapping("/create")
-    public String create(MemberSignUpRequest req){
+    public String create(MemberRequest req){
         log.info("회원가입 시작");
         memberService.signUp(req);
         log.info("회원가입 완료");
+
         return "redirect:/members/";
+
+//        트랜잭션 및 예외 테스트
+//        try{
+//            memberService.signUp(req);
+//            log.info("회원가입 완료");
+//            return "redirect:/members/";
+//        } catch (IllegalArgumentException e) {
+//            return "/404-error-page";
+//        }
+    }
+
+    @PostMapping("/member/update")
+    public String update(MemberRequest req){
+        log.info("회원 수정 시작");
+        memberService.update(req);
+        log.info("회원 수정 종료");
+
+        return "redirect:/members/member/find?id=" + req.getId();
+    }
+
+    @GetMapping("/member/delete")
+    public String delete(@RequestParam(value = "id") int id){
+        try{
+            log.info("회원 삭제 Start");
+            memberService.delete(id);
+            log.info("회원 삭제 End");
+            return "redirect:/members/";
+        } catch (EntityNotFoundException e){
+            return "/404-error-page";
+        }
     }
 
     @GetMapping("/member/find")
@@ -81,7 +110,7 @@ public class MemberController {
             model.addAttribute("member", member);
             log.info("회원 상세조회 API End");
             return "/member/member-details";
-        } catch (NoSuchElementException e){
+        } catch (EntityNotFoundException e){
             return "/404-error-page";
         }
     }

@@ -2,18 +2,17 @@ package com.encore.basic.service;
 
 import com.encore.basic.domain.Member;
 import com.encore.basic.dto.MemberResponse;
-import com.encore.basic.dto.MemberSignUpRequest;
+import com.encore.basic.dto.MemberRequest;
 import com.encore.basic.repository.MemberRepository;
-import com.encore.basic.repository.MybatisMemberRepository;
 import com.encore.basic.repository.SpringDataJpaMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 
 // 스프링 빈 (Bean): 스프링이 생성하고 관리하는 객체를 의미
@@ -30,18 +29,42 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Autowired
-    public MemberService(MybatisMemberRepository mybatisMemberRepository){
-        this.memberRepository = mybatisMemberRepository;
+    public MemberService(SpringDataJpaMemberRepository springDataJpaMemberRepository){
+        this.memberRepository = springDataJpaMemberRepository;
     }
 
-        public void signUp(MemberSignUpRequest req){
+    // @Transactional 어노테이션을 클래스 단위로 붙이면 모든 메서드에 각각 Transaction 적용
+    // Transactional을 적용하면 한 메서드 단위로 트랜잭션 지정
+    @Transactional
+    public void signUp(MemberRequest req) throws IllegalArgumentException{
         Member member = Member.builder()
                 .name(req.getName())
                 .email(req.getEmail())
                 .password(req.getPassword())
-                .createdAt(LocalDateTime.now())
                 .build();
         memberRepository.save(member);
+        // 트랜잭션 테스트
+//        Member member = Member.builder()
+//                .name(req.getName())
+//                .email(req.getEmail())
+//                .password(req.getPassword())
+//                .build();
+//        memberRepository.save(member);
+//        if (member.getName().contains("kim")){
+//            throw new IllegalArgumentException();
+//        }
+    }
+
+    @Transactional
+    public void update(MemberRequest req) throws EntityNotFoundException{
+        Member member = memberRepository.findById(req.getId()).orElseThrow(EntityNotFoundException::new);
+        member.updateMember(req.getName(), req.getPassword());
+        memberRepository.save(member);
+    }
+
+    public void delete(int id) throws EntityNotFoundException{
+        Member member = memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        memberRepository.delete(member);
     }
 
     public List<MemberResponse> findMembers(){
@@ -59,11 +82,11 @@ public class MemberService {
         return memberResponses;
     }
 
-    public MemberResponse findMember(int id) throws NoSuchElementException{
+    public MemberResponse findMember(int id) throws EntityNotFoundException{
         // orElseThrow를 통해 Optional 객체에서 값을 꺼냄
         // HTTP 문서에다가 예외 문구를 넣어 주어야 웹페이지 상에 보여진다. (ResponseEntity 클래스 활용: 상태 코드 처리)
         // 자바에서 발생하는 모든 예외는 500코드(서버 에러)로 반환됨. 따라서, 적절한 에러 코드를 반환해야함.
-        Member member = memberRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        Member member = memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         return MemberResponse.builder()
                 .id(member.getId())
