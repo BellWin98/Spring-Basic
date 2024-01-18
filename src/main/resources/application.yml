@@ -14,7 +14,7 @@ spring:
     username: root
     password: 1234
   jpa:
-    database: mysql
+    database: mysql # mariaDB로 하면 에러난다고 함
     # innoDB 엔진 사용 설정
     database-platform: org.hibernate.dialect.MariaDBDialect
     # 테이블 및 컬럼 자동 생성 (단, 스키마는 사전 생성 필요. JPA가 엔티티를 기준으로 테이블을 생성함)
