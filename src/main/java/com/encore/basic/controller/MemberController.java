@@ -89,10 +89,11 @@ public class MemberController {
         return "redirect:/members/member/find?id=" + req.getId();
     }
 
-    @GetMapping("/member/delete")
+    @PostMapping("/member/delete")
     public String delete(@RequestParam(value = "id") int id){
         try{
             log.info("회원 삭제 Start");
+            System.out.println("id " + id);
             memberService.delete(id);
             log.info("회원 삭제 End");
             return "redirect:/members/";

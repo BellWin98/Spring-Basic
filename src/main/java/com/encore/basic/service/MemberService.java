@@ -75,6 +75,8 @@ public class MemberService {
                     .id(member.getId())
                     .name(member.getName())
                     .email(member.getEmail())
+                    .password(member.getPassword())
+                    .now(member.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                     .build();
             memberResponses.add(memberResponse);
         }
@@ -86,7 +88,7 @@ public class MemberService {
         // orElseThrow를 통해 Optional 객체에서 값을 꺼냄
         // HTTP 문서에다가 예외 문구를 넣어 주어야 웹페이지 상에 보여진다. (ResponseEntity 클래스 활용: 상태 코드 처리)
         // 자바에서 발생하는 모든 예외는 500코드(서버 에러)로 반환됨. 따라서, 적절한 에러 코드를 반환해야함.
-        Member member = memberRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("검색하신 ID의 Member가 없습니다."));
 
         return MemberResponse.builder()
                 .id(member.getId())
