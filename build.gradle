@@ -40,6 +40,13 @@ dependencies {
 	// mybatis 관련 의존성 추가
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
 
+	// jsp를 위한 라이브러리 추가
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	implementation 'javax.servlet:jstl'
+
+	// Swagger 의존성 추가
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
 	// project 사이즈가 너무 커져버리므로 implementation으로 받지 않기.
 	// Getter, Setter 및 로그 관련(Slf4j) 의존성
 	compileOnly 'org.projectlombok:lombok'

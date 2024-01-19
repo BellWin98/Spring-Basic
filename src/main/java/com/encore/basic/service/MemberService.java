@@ -6,10 +6,12 @@ import com.encore.basic.dto.MemberRequest;
 import com.encore.basic.repository.MemberRepository;
 import com.encore.basic.repository.SpringDataJpaMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,7 @@ public class MemberService {
     // @Transactional 어노테이션을 클래스 단위로 붙이면 모든 메서드에 각각 Transaction 적용
     // Transactional을 적용하면 한 메서드 단위로 트랜잭션 지정
     @Transactional
-    public void signUp(MemberRequest req) throws IllegalArgumentException{
+    public void signUp(MemberRequest req) throws IllegalArgumentException, DataIntegrityViolationException {
         Member member = Member.builder()
                 .name(req.getName())
                 .email(req.getEmail())

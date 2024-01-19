@@ -152,4 +152,13 @@ public class HelloController {
         // req.getReader()를 통해 BufferedReader 로 직접 Parsing
         return "OK";
     }
+
+    // Controller + jsp 조합
+    // Thymeleaf 의존성 제거 해야 함
+    // jsp의 경로 및 확장자를 자동 설정하는 법: yml에서 mvc.prefix, suffix 수정
+    @GetMapping("/hello-servlet-jsp-get")
+    public String helloServletJspGet(Model model){
+        model.addAttribute("myData", "jsp test data");
+        return "hello-jsp";
+    }
 }
