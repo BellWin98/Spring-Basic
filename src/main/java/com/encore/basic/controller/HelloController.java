@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Controller // HTTP 통신을 쉽고 편하게 해주는 어노테이션
@@ -130,5 +131,25 @@ public class HelloController {
     public Hello jsonPostHandle3(@RequestBody Hello hello) {
         System.out.println(hello);
         return hello;
+    }
+
+    @PostMapping("/http-servlet")
+    @ResponseBody
+    public String httpServletTest(HttpServletRequest req){
+        // HttpServletRequest 객체에서 Header 정보 추출
+        System.out.println("Content-Type: " + req.getContentType());
+        System.out.println("Http 요청 방식: " + req.getMethod());
+
+        // session: 로그인(auth) 정보에서 필요한 정보 값을 추출할 때 많이 사용
+        System.out.println("세션 정보: " + req.getSession());
+
+        System.out.println("Accept: " + req.getHeader("Accept"));
+
+        // HttpServletRequest 객체에서 Body 정보 추출. (쓸 일 없음)
+        System.out.println("test1(key)에 대한 value: " + req.getParameter("test1"));
+        System.out.println("test2(key)에 대한 value: " + req.getParameter("test2"));
+
+        // req.getReader()를 통해 BufferedReader 로 직접 Parsing
+        return "OK";
     }
 }
