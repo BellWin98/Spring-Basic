@@ -8,6 +8,14 @@
 
 # 필요한 이유: jdbc는 모든 스프링 기술의 근간이다.
 spring:
+  # controller와 jsp 사용 시에 경로 및 확장자 설정
+  # 기본 설정이 Thymeleaf 이므로 의존성 제거해줘야 함
+  # Controller의 기본 설정이 Thymeleaf이므로, templates폴더에서 파일을 찾게된다.
+  # 하지만, jsp는 webapp폴더에 있으므로 thymeleaf 의존성 제거
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/views/
+#      suffix: .jsp
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/basic
@@ -28,6 +36,12 @@ spring:
       ddl-auto: update
     # jpa가 자동으로 쿼리를 생성할 때, 쿼리가 console 창에 보여짐
     show_sql: true
+
+ # Spring Boot 2.4 이상에서는 기본적으로 PathPatternParse를 사용하고 있는데,
+  # 이는 이전 버전과 다른 경로 매칭 규칙을 가지고 있고, springfox와 같은 외부 라이브러리에선느 문제 발생
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 # mapper 파일의 위치
 mybatis:

@@ -5,8 +5,12 @@ import com.encore.basic.domain.Member;
 import com.encore.basic.dto.MemberRequest;
 import com.encore.basic.dto.MemberResponse;
 import com.encore.basic.service.MemberService;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +21,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@Api(tags = "회원 API")
 @RequestMapping("/rest/members")
 public class MemberRestController {
 
@@ -35,8 +40,12 @@ public class MemberRestController {
 
     @PostMapping("/create")
     public String create(@RequestBody MemberRequest req){
-        memberService.signUp(req);
-        return "ok";
+        try {
+            memberService.signUp(req);
+            return "ok";
+        } catch (DataIntegrityViolationException e){
+            return "이메일 중복 에러";
+        }
     }
 
     @PatchMapping("/member/update")
