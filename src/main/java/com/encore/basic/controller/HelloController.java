@@ -161,4 +161,12 @@ public class HelloController {
         model.addAttribute("myData", "jsp test data");
         return "hello-jsp";
     }
+
+    public void helloBuilderTest(){
+        Hello hello = Hello.builder()
+                .email("helloEmail")
+                .password("helloPassword")
+                .name("helloName")
+                .build();
+    }
 }
